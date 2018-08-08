@@ -7,5 +7,8 @@
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.14.0",
     "typescript": "^3.0.1"
+  },
+  "dependencies": {
+    "kiwi.js": "^1.0.2"
   }
 }
