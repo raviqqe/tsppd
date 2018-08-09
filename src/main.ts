@@ -39,6 +39,24 @@ export function execute(trips: ITrip[]): IWaypointOutput[] {
     solver.createConstraint(new Expression(...xs), Operator.Eq);
   }
 
+  const ts = new Array(locations.length).map(() => new Variable());
+  const m = 1000 * locations.length;
+
+  for (const t of ts) {
+    solver.createConstraint(t, Operator.Ge);
+    solver.createConstraint(t, Operator.Le, locations.length - 1);
+  }
+
+  for (const [i, t] of ts.entries()) {
+    for (const [j, s] of ts.entries()) {
+      solver.createConstraint(
+        new Expression(t, 1, [-1, m], [m, xss[i][j]]),
+        Operator.Le,
+        s
+      );
+    }
+  }
+
   solver.updateVariables();
 
   return [];
