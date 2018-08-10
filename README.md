@@ -1,1 +1,5 @@
 # TSPPD
+
+## License
+
+[MIT](LICENSE)
