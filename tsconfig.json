@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "downlevelIteration": true,
-    "lib": ["esnext"],
-    "outDir": "dist",
-    "rootDir": "src",
-    "target": "es5"
-  }
-}
