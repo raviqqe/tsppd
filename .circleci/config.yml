@@ -1,0 +1,9 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: python
+    steps:
+      - checkout
+      - run: pip3 install --user -r requirements.txt
+      - run: python3 src/main.py
