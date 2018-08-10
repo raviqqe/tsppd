@@ -1,28 +1,46 @@
+import random
+
 from domain import Location, Trip, Waypoint, WaypointType
 from main import find_path
 
 
+def random_location() -> Location:
+    return Location(random.random(), random.random())
+
+
 def test_find_path():
     for trips in [
+        [
+            Trip("my_trip",
+                 Waypoint(WaypointType.PICKUP, Location(0, 0)),
+                 Waypoint(WaypointType.DROPOFF, Location(1, 0))),
+            Trip("your_trip",
+                 Waypoint(WaypointType.PICKUP, Location(0, 1)),
+                 Waypoint(WaypointType.DROPOFF, Location(1, 1))),
+        ],
+        [
+            Trip("my_trip",
+                 Waypoint(WaypointType.PICKUP,
+                          Location(0, 0)),
+                 Waypoint(WaypointType.DROPOFF, Location(1, 0))),
+            Trip("your_trip",
+                 Waypoint(WaypointType.PICKUP,
+                          Location(0, 1)),
+                 Waypoint(WaypointType.DROPOFF, Location(1, 1))),
+            Trip("good_trip",
+                 Waypoint(WaypointType.PICKUP,
+                          Location(0.5, 2)),
+                 Waypoint(WaypointType.DROPOFF, Location(1, 3))),
+        ],
+        *[
             [
-                Trip("my_trip",
-                     Waypoint(WaypointType.PICKUP, Location(0, 0)),
-                     Waypoint(WaypointType.DROPOFF, Location(1, 0))),
-                Trip("your_trip",
-                     Waypoint(WaypointType.PICKUP, Location(0, 1)),
-                     Waypoint(WaypointType.DROPOFF, Location(1, 1))),
-            ],
-            [
-                Trip("my_trip",
-                     Waypoint(WaypointType.PICKUP, Location(0, 0)),
-                     Waypoint(WaypointType.DROPOFF, Location(1, 0))),
-                Trip("your_trip",
-                     Waypoint(WaypointType.PICKUP, Location(0, 1)),
-                     Waypoint(WaypointType.DROPOFF, Location(1, 1))),
-                Trip("good_trip",
-                     Waypoint(WaypointType.PICKUP, Location(0.5, 2)),
-                     Waypoint(WaypointType.DROPOFF, Location(1, 3))),
-            ],
+                Trip(str(i),
+                     Waypoint(WaypointType.PICKUP, random_location()),
+                     Waypoint(WaypointType.DROPOFF, random_location()))
+                for i in range(random.randint(1, 8))
+            ]
+            for _ in range(10)
+        ]
     ]:
         waypoint_outputs = find_path(trips)
 
