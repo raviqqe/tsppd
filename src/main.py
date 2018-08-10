@@ -29,9 +29,11 @@ def find_path(trips: List[Trip]) -> List[WaypointOutput]:
         problem += pulp.lpSum(xss[i][j] for j in range(n) if i != j) == 1
         problem += pulp.lpSum(xss[j][i] for j in range(n) if i != j) == 1
 
+        # A weak constraint to remove partial circuits
+        # http://web.tuat.ac.jp/~miya/fujie_ORSJ.pdf
         for j in range(n):
             if j not in (0, i):
-                problem += ts[i] + 1 - (10 ** 8 * n) * (1 - xss[i][j]) <= ts[j]
+                problem += ts[i] - ts[j] + (n-1) * xss[i][j] <= n - 2
 
     for i in range(0, n, 2):
         problem += ts[i] + 1 <= ts[i+1]
