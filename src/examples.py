@@ -1,6 +1,8 @@
+from typing import List
+
 from domain import Location, Trip, Waypoint, WaypointType
 
-trips = [
+trips: List[List[Trip]] = [
     [
         Trip("my_trip",
              Waypoint(WaypointType.PICKUP, Location(0, 0)),
