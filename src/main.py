@@ -36,6 +36,7 @@ def find_path(trips: List[Trip]) -> List[WaypointOutput]:
             if j not in (0, i):
                 problem += ts[i] - ts[j] + (n-1) * xss[i][j] <= n - 2
 
+    # Time constraints for pickups and dropoffs
     for i in range(0, n, 2):
         problem += ts[i] + 1 <= ts[i+1]
 
