@@ -1,6 +1,5 @@
-from collections import namedtuple
 from enum import Enum
-from typing import List
+from typing import List, NamedTuple
 
 
 __all__ = [
@@ -13,7 +12,10 @@ __all__ = [
 ]
 
 
-class Location(namedtuple("Location", ["x", "y"])):
+class Location(NamedTuple):
+    x: float
+    y: float
+
     def get_distance(self, location: "Location"):
         return ((self.x - location.x) ** 2 + (self.y - location.y) ** 2) ** 0.5
 
@@ -23,11 +25,20 @@ class WaypointType(Enum):
     DROPOFF = 2
 
 
-Waypoint = namedtuple("Waypoint", ["type", "location"])
+class Waypoint(NamedTuple):
+    type: WaypointType
+    location: Location
 
-Trip = namedtuple("Trip", ["id", "pickup_waypoint", "dropoff_waypoint"])
 
-WaypointOutput = namedtuple("WaypointOutput", ["trip_id", "type"])
+class Trip(NamedTuple):
+    id: str
+    pickup_waypoint: Waypoint
+    dropoff_waypoint: Waypoint
+
+
+class WaypointOutput(NamedTuple):
+    trip_id: str
+    type: WaypointType
 
 
 def trips_to_locations(trips: List[Trip]) -> List[Location]:
