@@ -6,4 +6,5 @@ jobs:
     steps:
       - checkout
       - run: pip3 install --user -r requirements.txt
+      - run: PATH=~/.local/bin:$PATH pytest
       - run: python3 src/main.py
