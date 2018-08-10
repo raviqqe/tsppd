@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 from domain import Location, Trip, Waypoint, WaypointType
 from main import find_path
@@ -9,18 +10,17 @@ def random_location() -> Location:
     return Location(random.random(), random.random())
 
 
+def random_trips(n: int) -> List[Trip]:
+    return [Trip(str(i),
+                 Waypoint(WaypointType.PICKUP, random_location()),
+                 Waypoint(WaypointType.DROPOFF, random_location()))
+            for i in range(n)]
+
+
 def test_find_path():
     for trips in [
         *examples.trips,
-        *[
-            [
-                Trip(str(i),
-                     Waypoint(WaypointType.PICKUP, random_location()),
-                     Waypoint(WaypointType.DROPOFF, random_location()))
-                for i in range(random.randint(1, 8))
-            ]
-            for _ in range(10)
-        ]
+        *[random_trips(random.randint(1, 8)) for _ in range(10)],
     ]:
         waypoint_outputs = find_path(trips)
 
