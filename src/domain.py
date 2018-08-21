@@ -42,7 +42,11 @@ class WaypointOutput(NamedTuple):
 
 
 def trips_to_locations(trips: List[Trip]) -> List[Location]:
-    return [location for locations in
-            [[trip.pickup_waypoint.location, trip.dropoff_waypoint.location]
-             for trip in trips]
-            for location in locations]
+    return [
+        location
+        for locations in [
+            [trip.pickup_waypoint.location, trip.dropoff_waypoint.location]
+            for trip in trips
+        ]
+        for location in locations
+    ]

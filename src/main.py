@@ -14,15 +14,25 @@ def find_path(trips: List[Trip]) -> List[WaypointOutput]:
 
     problem = pulp.LpProblem("TSPPD")
 
-    xss = [[pulp.LpVariable(f"x({i},{j})", cat="Binary") if i != j else None
-            for j in range(n)] for i in range(n)]
+    xss = [
+        [
+            pulp.LpVariable(f"x({i},{j})", cat="Binary") if i != j else None
+            for j in range(n)
+        ]
+        for i in range(n)
+    ]
 
-    ts = [pulp.LpVariable(f"t({i})", cat="Integer", lowBound=1, upBound=n)
-          for i in range(n)]
+    ts = [
+        pulp.LpVariable(f"t({i})", cat="Integer", lowBound=1, upBound=n)
+        for i in range(n)
+    ]
 
     objective = pulp.lpSum(
         locations[i].get_distance(locations[j]) * xss[i][j]
-        for i in range(n) for j in range(n) if i != j)
+        for i in range(n)
+        for j in range(n)
+        if i != j
+    )
 
     problem += objective
 
@@ -34,11 +44,11 @@ def find_path(trips: List[Trip]) -> List[WaypointOutput]:
         # http://web.tuat.ac.jp/~miya/fujie_ORSJ.pdf
         for j in range(n):
             if j not in (0, i):
-                problem += ts[i] - ts[j] + (n-1) * xss[i][j] <= n - 2
+                problem += ts[i] - ts[j] + (n - 1) * xss[i][j] <= n - 2
 
     # Time constraints for pickups and dropoffs
     for i in range(0, n, 2):
-        problem += ts[i] + 1 <= ts[i+1]
+        problem += ts[i] + 1 <= ts[i + 1]
 
     status = pulp.LpStatus[problem.solve()]
 
@@ -48,8 +58,10 @@ def find_path(trips: List[Trip]) -> List[WaypointOutput]:
     if status != "Optimal":
         raise RuntimeError("no solution found")
 
-    ways = numpy.array(
-        [[x.value() if x is not None else 0 for x in xs] for xs in xss]) > 0.5
+    ways = (
+        numpy.array([[x.value() if x is not None else 0 for x in xs] for xs in xss])
+        > 0.5
+    )
 
     indices = [0]
 
@@ -61,10 +73,12 @@ def find_path(trips: List[Trip]) -> List[WaypointOutput]:
 
         indices.append(index)
 
-    return [WaypointOutput(trips[index//2].id, WaypointType.PICKUP)
-            if index % 2 == 0 else
-            WaypointOutput(trips[index//2].id, WaypointType.DROPOFF)
-            for index in indices]
+    return [
+        WaypointOutput(trips[index // 2].id, WaypointType.PICKUP)
+        if index % 2 == 0
+        else WaypointOutput(trips[index // 2].id, WaypointType.DROPOFF)
+        for index in indices
+    ]
 
 
 def main():
@@ -72,5 +86,5 @@ def main():
         pprint(find_path(trips))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

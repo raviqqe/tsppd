@@ -11,10 +11,14 @@ def random_location() -> Location:
 
 
 def random_trips(n: int) -> List[Trip]:
-    return [Trip(str(i),
-                 Waypoint(WaypointType.PICKUP, random_location()),
-                 Waypoint(WaypointType.DROPOFF, random_location()))
-            for i in range(n)]
+    return [
+        Trip(
+            str(i),
+            Waypoint(WaypointType.PICKUP, random_location()),
+            Waypoint(WaypointType.DROPOFF, random_location()),
+        )
+        for i in range(n)
+    ]
 
 
 def test_find_path():
@@ -30,8 +34,9 @@ def test_find_path():
             if pickup_output.type == WaypointType.PICKUP:
                 dropoff_outputs = [
                     waypoint_output
-                    for waypoint_output in waypoint_outputs[index+1:]
-                    if waypoint_output.trip_id == pickup_output.trip_id]
+                    for waypoint_output in waypoint_outputs[index + 1 :]
+                    if waypoint_output.trip_id == pickup_output.trip_id
+                ]
 
                 assert len(dropoff_outputs) == 1
                 assert dropoff_outputs[0].type == WaypointType.DROPOFF
